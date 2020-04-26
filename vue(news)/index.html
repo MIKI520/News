@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新闻列表</title>
+    <style>
+        body {
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <li v-for="(item,key) in news" v-cloak @click="url(key,$event)">
+            {{item.title}}
+        </li>
+        <!-- <div v-for="(value, name) in news"> -->
+        <!-- {{ name }}: {{ value }} -->
+        <!-- </div> -->
+    </div>
+
+    <script src="/js/vue.min.js"></script>
+    <script src="/js/axios.min.js"></script>
+    <script src="/js/jquery-1.8.3.js"></script>
+    <script>
+        const app = new Vue({
+            el: '#app',
+            data: {
+                news: [],
+                id: 0,
+            },
+            methods: {
+                url(id,event) {
+                    axios.get('http://api.funacg.top/api/v1/news').then(data => {
+                        this.id = data.data.data[id].id;
+                        $(window).attr('location', 'detail.html?id=' + this.id);
+                    })
+                }
+            },
+            mounted() {
+                axios.get('http://api.funacg.top/api/v1/news').then(ret => {
+                    this.news = ret.data.data
+                })
+            },
+
+        })
+    </script>
+</body>
+
+</html>
