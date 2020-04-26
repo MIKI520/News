@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新闻修改</title>
+    <style>
+        a{
+            color:yellowgreen;
+            text-decoration:none;
+            margin-left:10px ;
+        }
+        body {
+            font-size: 18px;
+        }
+
+        div {
+            margin-bottom: 10px;
+        }
+    </style>
+<body>
+<a href="{:url('list')}">新闻列表</a>
+<hr>
+<form action="{:url('edit',['id' => $data.id])}" method="post">
+    <input type="hidden" name="id" value="{$data.id}">
+    <div>
+        <label>
+            标题:
+            <input type="text" name="title" autocapitalize="off" value="{$data['title']}">
+        </label>
+    </div>
+    <div>
+        <label>
+            描述:
+            <input type="text" name="script" autocapitalize="off" value="{$data['script']}">
+        </label>
+    </div>
+    <div>
+        <label>
+            作者:
+            <input type="text" name="author" autocapitalize="off" value="{$data['author']}">
+        </label>
+    </div>
+    <div>
+        <label>
+            内容:
+            <textarea name="body" cols="60" rows="20" >{$data['body']}</textarea>
+        </label>
+    </div>
+    <div>
+        <label>
+            <input type="submit" value="修改新闻" autocapitalize="off">
+        </label>
+    </div>
+</form>
+</body>
+</html>
