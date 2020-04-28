@@ -45,3 +45,4 @@ Route::resource('attribute','admin/attribute',['ext => html'],['id' => '\d+']);
 Route::resource('user','admin/user',['ext => html'],['id' => '\d+']);
 //api
 Route::get('api/v1/news','api/News/index');
+Route::get('api/v1/detail','api/News/detail');

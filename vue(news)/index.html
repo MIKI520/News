@@ -9,14 +9,41 @@
         body {
             font-size: 18px;
         }
+    table{
+        text-align: left;
+        width: 1000px;
+    }
+        a{
+        color:#333;
+        font-weight: 900;
+        text-decoration: none;
+    }
+    a:hover{
+        color:greenyellow;
+    }
     </style>
 </head>
 
 <body>
     <div id="app">
-        <li v-for="(item,key) in news" v-cloak @click="url(key,$event)">
-            {{item.title}}
-        </li>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>author</th>
+                <th>title</th>
+            </tr>
+            <tr v-for="(item,key) in news">
+                <td>{{item.id}}</td>
+                <td>{{item.author}}</td>
+                <td>
+                    <!-- <a v-cloak @click="url(key,$event)">
+                        {{item.title}}<br>
+                    </a> -->
+                    <router-link :to="{name:'detail',params:{id:item.id}}">{{item.title}}</router-link>
+                </td>
+            </tr>
+        </table>
+        <router-view></router-view>
         <!-- <div v-for="(value, name) in news"> -->
         <!-- {{ name }}: {{ value }} -->
         <!-- </div> -->
@@ -25,13 +52,64 @@
     <script src="/js/vue.min.js"></script>
     <script src="/js/axios.min.js"></script>
     <script src="/js/jquery-1.8.3.js"></script>
+    <script src="/js/vue-router.js"></script>
+    <!-- 定义子组件详情页 -->
+    <script type="text/x-template" id="detail">
+        <div>
+            <hr>
+            <ul>
+                内容<li>{{info.body}}</li>
+            </ul>
+            
+        </div>
+    </script>
     <script>
+        //1.定义一个详情页面
+        const Detail = {
+            template:'#detail',
+            data(){
+                return{
+                    id:0,
+                    info:{}
+                }
+            },
+            mounted(){
+                //新闻id
+                this.getData();
+                },
+            //侦听器
+                watch:{
+                    $route(newVal,oldVal){
+                this.getData();                  
+                }},
+                methods:{
+                    getData(){
+                        //新闻id
+                this.id=this.$route.params.id
+                console.log(this.id);
+                axios.get('http://api.funacg.top/api/v1/detail/id/'+this.id).then(data =>{
+                    console.log(data.data.data.body),
+                    this.info = data.data.data
+                    })
+                }
+        }
+        }
+        //2.定义路由
+        const routes = [
+            {path:'/detail/:id',component:Detail,name:'detail'}
+        ]
+        //3.绑定定义路由
+        const router = new VueRouter({
+            routes
+        })
         const app = new Vue({
             el: '#app',
             data: {
                 news: [],
                 id: 0,
             },
+            //4.书写事件
+            router,
             methods: {
                 url(id,event) {
                     axios.get('http://api.funacg.top/api/v1/news').then(data => {
